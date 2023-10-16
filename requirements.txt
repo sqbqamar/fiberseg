@@ -6,8 +6,8 @@ pyyaml>=5.3.1
 requests>=2.23.0
 scipy>=1.4.1
 tqdm>=4.64.0
-torch==1.10.0+cpu 
-torchvision==0.11.0+cpu 
+torch==1.10.0
+torchvision==0.11.0
 #-f https://download.pytorch.org/whl/torch_stable.html
 ultralytics==8.0.89
 pandas>=1.1.4
