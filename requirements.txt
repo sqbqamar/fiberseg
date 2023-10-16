@@ -1,4 +1,4 @@
--r apt-additional-sources.list
+-r apt-sources.list
 -r apt.txt
 matplotlib>=3.3.0
 numpy>=1.22.2 # pinned by Snyk to avoid a vulnerability
