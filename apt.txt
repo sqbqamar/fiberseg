@@ -1,3 +1,4 @@
+update -y
 libgl1-mesa-glx
 ffmpeg
 libsm6
