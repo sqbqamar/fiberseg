@@ -13,9 +13,10 @@ RUN echo "conda activate myenv" >> ~/.bashrc
 # Set the default working directory
 WORKDIR /home/jovyan
 
-# Install additional packages (for example, from your requirements.txt file)
+# Install additional packages ( from requirements.txt file)
 COPY requirements.txt /home/jovyan/
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install torch==1.10.0+cpu torchvision==0.11.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
+#RUN pip install torch==1.10.0+cu102 torchvision==0.11.0+cu102 torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html
 RUN pip install ultralytics==8.0.89
 
