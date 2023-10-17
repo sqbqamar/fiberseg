@@ -16,7 +16,7 @@ WORKDIR /home/jovyan
 # Install additional packages ( from requirements.txt file)
 COPY requirements.txt /home/jovyan/
 RUN pip install --no-cache-dir -r requirements.txt
-RUN conda install pytorch==1.12.0 torchvision==0.13.0 cpuonly -c pytorch
+RUN conda install pytorch torchvision
 #RUN pip install torch==1.10.0+cpu torchvision==0.11.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
 #RUN pip install torch==1.13.0+cu117 torchvision==0.14.0+cu117 --extra-index-url https://download.pytorch.org/whl/cu117
 #RUN pip install torch==1.10.0+cu102 torchvision==0.11.0+cu102 torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html
