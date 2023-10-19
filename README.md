@@ -7,6 +7,7 @@ Interactive zone for Fiber Segmentation
 
 
 
+
 In your notebook file:
 
 1- Load the trained model by specifying the weight path:
