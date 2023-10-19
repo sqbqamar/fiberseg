@@ -20,3 +20,7 @@ model = YOLO('path/to/your/trained/model')
 
 input_data = cv2.imread("Path/to/your image")
 
+
+3- Conversion scale 
+1 px = 0.65 mm
+
