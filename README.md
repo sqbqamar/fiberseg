@@ -8,7 +8,7 @@ Interactive zone for Fiber Segmentation
 
 
 
-In your notebook file:
+In the notebook file (prediction_file.ipynb):
 
 1- Load the trained model by specifying the weight path:
 
@@ -17,7 +17,7 @@ model = YOLO('path/to/your/trained/model')
 
  
 
-2- Pass the input to the model by adding the following code:
+2- Pass the input to the model by adding the image path in the following code:
 
 input_data = cv2.imread("Path/to/your image")
 
