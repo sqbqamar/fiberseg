@@ -19,7 +19,10 @@ COPY prediction_file.ipynb /home/jovyan/
 RUN pip install --no-cache-dir -r requirements.txt
 
 #RUN pip install torch==1.13.0+cpu --extra-index-url https://download.pytorch.org/whl/cpu
-RUN pip install torchvision==0.15.1
+RUN pip install torch==2.0.1+cpu --index-url https://download.pytorch.org/whl/cpu
+RUN pip install torchvision==0.15.2+cpu --index-url https://download.pytorch.org/whl/cpu
+
+#RUN pip install torchvision==0.15.1
 
 RUN pip install ultralytics==8.0.89
 
