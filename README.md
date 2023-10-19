@@ -8,7 +8,7 @@ Interactive zone for Fiber Segmentation
 
 
 
-In the notebook file (prediction_file.ipynb):
+In the prediction_file.ipynb file:
 
 1- Load the trained model by specifying the weight path:
 
