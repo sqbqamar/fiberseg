@@ -1,7 +1,7 @@
 FROM jupyter/base-notebook
 USER root
 RUN apt-get update -y
-RUN apt install libgl1-mesa-glx -y
+RUN apt install libgl1 libgl1-mesa-glx libglib2.0-0 -y
 
 # Install Python 3.8 using conda
 #RUN conda install --quiet --yes python=3.8
