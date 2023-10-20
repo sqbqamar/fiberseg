@@ -18,6 +18,7 @@ COPY requirements.txt /home/jovyan/
 COPY prediction_file.ipynb /home/jovyan/
 COPY image /home/jovyan/
 COPY Result /home/jovyan/
+COPY best.pt /home/jovyan/
 RUN pip install --no-cache-dir -r requirements.txt
 
 #RUN pip install torch==1.13.0+cpu --extra-index-url https://download.pytorch.org/whl/cpu
