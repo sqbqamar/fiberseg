@@ -18,3 +18,4 @@ py-cpuinfo  # display CPU info
 #thop>=0.1.1  # FLOPs computation
 #Flask>=2.0
 gunicorn==20.1.0
+openpyxl
