@@ -31,7 +31,7 @@ You can deploy the API to label in an interactive way.
 Run:
 
 ```bash
-$ python app.py --device (by default is GPU)
+$ python app.py 
 ```
 Open the application in any browser 0.0.0.0:5000 and upload your image. The API will return the image labeled.
 
