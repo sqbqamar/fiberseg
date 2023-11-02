@@ -18,7 +18,7 @@ $ pip install -r requirements.txt
 
 ```bash
 Usage - sources:
-    $ python app.py --weights best.pt --source 'image/131.jpg'                          
+    $ python prediction.py --weights best.pt --source 'image/131.jpg'                          
  ```   
 
 
