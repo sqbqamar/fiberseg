@@ -16,7 +16,7 @@ Just open the Train_custom_data.ipynb file on Google Colab or the local system a
 
 ## Instance Segmentation API
 
-`app.py` can deal with images and can run into the CPU, but it is highly recommendable to run in GPU.
+`prediction.py` can deal with images and can run into the CPU, but it is highly recommendable to run in GPU.
 
 ```bash
 Usage - sources:
