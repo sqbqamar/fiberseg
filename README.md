@@ -1,6 +1,6 @@
 # Yolov8 Flask API for Fiber Segmentation
 
-This code is based on the YOLOv5 from Ultralytics and it has all the functionalities that the original code has:
+This code is based on the YOLOv8 from Ultralytics and it has all the functionalities that the original code has:
 - Source: images.
 - Weights are supported: Pytorch, Onnx.
 
@@ -11,6 +11,8 @@ Python 3.8 or later with all [requirements.txt](requirements.txt) dependencies i
 ```bash
 $ pip install -r requirements.txt
 ```
+## Train YOLOv8 with Custom Dataset
+Just open the Train_custom_data.ipynb file on Google Colab or the local system and follow the instructions as written in the file.  
 
 ## Instance Segmentation API
 
