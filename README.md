@@ -10,7 +10,7 @@ Python 3.8 or later with all [requirements.txt](requirements.txt) dependencies i
 
 ```bash
 $ pip install -r requirements.txt
-
+```
 
 ## Instance Segmentation API
 
@@ -19,7 +19,7 @@ $ pip install -r requirements.txt
 ```bash
 Usage - sources:
     $ python app.py --weights best.pt --source 'image/131.jpg'                          
-    
+ ```   
 
 
 ## Interactive implementation
@@ -31,15 +31,8 @@ Run:
 ```bash
 $ python app.py --device (by default is GPU)
 ```
-Open the application in any browser 0.0.0.0:5000 and upload your image.
+Open the application in any browser 0.0.0.0:5000 and upload your image. The API will return the image labeled.
 
-
-## How to use the API
-
-# Interactive way
-Just open your favorite browser and go to 0.0.0.0:5000 and intuitevely load the image you want to label and press the buttom "submit".
-
-The API will return the image labeled.
 
 
 ## Run code with Binder
