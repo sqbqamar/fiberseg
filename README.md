@@ -1,4 +1,4 @@
-# Yolov8 Flask API for detection and segmentation
+# Yolov8 Flask API for Fiber Segmentation
 
 This code is based on the YOLOv5 from Ultralytics and it has all the functionalities that the original code has:
 - Source: images.
@@ -54,12 +54,14 @@ Just click on the binder link, and it automatically installs all the required li
 In the prediction_file.ipynb file:
 
 1- Load the trained model by specifying the weight path:
+
 model = YOLO('path/to/your/trained/model') 
 
 
  
 
 2- Pass the input to the model by adding the image path in the following code:
+
 input_data = cv2.imread("Path/to/your image")
 
 
