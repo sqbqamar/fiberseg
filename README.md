@@ -12,7 +12,7 @@ Python 3.8 or later with all [requirements.txt](requirements.txt) dependencies i
 $ pip install -r requirements.txt
 
 
-## Instance segmentation API
+## Instance Segmentation API
 
 `app.py` can deal with images and can run into the CPU, but it is highly recommendable to run in GPU.
 
@@ -29,14 +29,14 @@ You can deploy the API to label in an interactive way.
 Run:
 
 ```bash
-$ python app.py --device cpu # to run into CPU (by default is GPU)
+$ python app.py --device (by default is GPU)
 ```
 Open the application in any browser 0.0.0.0:5000 and upload your image.
 
 
 ## How to use the API
 
-### Interactive way
+# Interactive way
 Just open your favorite browser and go to 0.0.0.0:5000 and intuitevely load the image you want to label and press the buttom "submit".
 
 The API will return the image labeled.
