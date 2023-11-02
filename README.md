@@ -1,8 +1,8 @@
 # Yolov8 Flask API for Fiber Segmentation
 
 This code is based on the YOLOv8 from Ultralytics and it has all the functionalities that the original code has:
-- Source: images.
-- Weights are supported: Pytorch, Onnx.
+- Source: images
+- Supported weight: Pytorch
 
 ## Requirements
 
