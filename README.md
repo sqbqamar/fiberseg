@@ -13,7 +13,7 @@ $ pip install -r requirements.txt
 ```
 ## Train YOLOv8 with Custom Dataset
 Just open the Train_custom_data.ipynb file on Google Colab or the local system and follow the instructions as written in the file.  
-
+[Open Training file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/Train_custom_data.ipynb)
 ## Instance Segmentation API
 
 `prediction.py` can deal with images and can run into the CPU, but it is highly recommendable to run in GPU.
@@ -22,7 +22,7 @@ Just open the Train_custom_data.ipynb file on Google Colab or the local system a
 Usage - sources:
     $ python prediction.py --weights best.pt --source 'image/131.jpg'                          
  ```   
-[Open Prediction file in Google Colab] (https://drive.google.com/uc?id=1x_gvGNRkbltCkK9u6peiK6sqFcMnA9-%5F)
+[Open Prediction file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/prediction_file.ipynb)
 
 ## Interactive implementation
 
