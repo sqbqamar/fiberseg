@@ -22,7 +22,7 @@ Just open the Train_custom_data.ipynb file on Google Colab or the local system a
 Usage - sources:
     $ python prediction.py --weights best.pt --source 'image/131.jpg'                          
  ```   
-[Open Prediction file in Google Colab] https://drive.google.com/uc?id=1x_gvGNRkbltCkK9u6peiK6sqFcMnA9-_
+[Open Prediction file in Google Colab] (https://drive.google.com/uc?id=1x_gvGNRkbltCkK9u6peiK6sqFcMnA9-_)
 
 ## Interactive implementation
 
