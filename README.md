@@ -63,5 +63,5 @@ input_data = cv2.imread("Path/to/your image")
 
 ## Conversion scale 
 We set the conversion ratio of each pixel 
-1 px = 0.65 mm
+1 px = 0.425 mm
 
