@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Oct 25 13:20:26 2023
+Created on Thu Apr 25 13:43:24 2024
 
-@author: SAQIBQ
+@author: drsaq
 """
-
-# Import all required libraries 
 
 from ultralytics import YOLO
 import numpy as np
@@ -16,10 +14,9 @@ import random
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
+from fil_finder import FilFinder2D
+import astropy.units as u
 
-
-
-# Load a custom YOLO model using the "best.pt" weights file
 model = YOLO("best.pt") 
 
 # Define the path to the input image
@@ -50,157 +47,114 @@ if imgsz is None:
     imgsz = 512 
 #print("imgsz:", imgsz)
 
-
-
-# Use the YOLO model to detect objects in the input image
 def detect(model, img):
     # Perform instance segmentation and store the results in the "results" variable
-    results = model.predict(source=img.copy(), project="Result", name="pred", imgsz=imgsz, save=True, iou=0.8, conf=0.6, save_txt=False)
+    results = model.predict(source=img.copy(), project="Result", name="pred", overlap_mask=False, imgsz=imgsz, save=True, iou=0.8, conf=0.6, save_txt=False)
     result = results[0]
-    # Initialize lists to store segment information and total contour areas
-    segments = []
-    total_area= []
-    # Get the shape of the original image from the result
-    h2, w2, c2 = results[0].orig_img.shape
-    # Process each mask in the result
-    for x in result.masks.cpu().data.numpy().astype('uint8'):
-        # Resize the mask to match the shape of the original image
-        x = cv2.resize(x, (w2, h2))
-        # Find contours in the mask
-        c = cv2.findContours(x, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
-        # Calculate the total area of contours in the mask
-        contour_area = 0
-        for contour in c:
-            area = cv2.contourArea(contour)
-            contour_area += area
-        # Concatenate the contours and add them to the segments list
-        c = np.concatenate([x.reshape(-1, 2) for x in c])
-        # Concatenate the contours and add them to the segments list
-        segments.append(c.astype('float32'))
-        total_area.append(contour_area)
         
-    # Extract bounding boxes, class IDs, and scores from the result
+    # Extract Masks, bounding boxes, class IDs, and scores from the result
+    segment = result.masks.cpu().data.numpy()
     bboxes = np.array(result.boxes.xyxy.cpu(), dtype="int")
     class_ids = np.array(result.boxes.cls.cpu(), dtype="int")
     scores = np.array(result.boxes.conf.cpu(), dtype="float").round(2)
     
-    # Return the detected bounding boxes, class IDs, segments, scores, and total contour areas
-    return bboxes, class_ids, segments, scores, total_area
+    # Return the detected bounding boxes, class IDs, segments, and scores
+    return bboxes, class_ids, segment, scores
 
-
-"""
- Draw a mask on an image using specified points and color with optional transparency.
-
- Parameters:
- - img: The input image on which the mask will be drawn.
- - pts: List of points that define the mask shape.
- - color: The RGB color to fill the mask with.
- - alpha: The transparency of the mask (0.0 for fully transparent, 1.0 for fully opaque).
-
- Returns:
- - The image with the mask drawn on it.
-
- This function takes an input image, a list of points (`pts`) that define the shape of the mask,
- a color in RGB format, and an optional transparency level (`alpha`). It then draws the mask on
- a copy of the input image and returns the resulting image.
-
- The `pts` parameter should be a list of points, each represented as a tuple (x, y), where x and y
- are the coordinates in the image. The `color` parameter specifies the fill color of the mask, and
- `alpha` controls the transparency of the mask, allowing the underlying image to show through.
- """
 def draw_mask(img, pts, color, alpha=0.5):
- h, w, _ = img.shape
+    h, w, _ = img.shape
 
- overlay = img.copy()
- output = img.copy()
+    overlay = img.copy()
+    output = img.copy()
 
- pts_list = [np.array(pts, dtype=np.int32)]  # Convert the input `pts` to the correct format
- cv2.fillPoly(overlay, pts_list, color)
- output = cv2.addWeighted(overlay, alpha, output, 1 - alpha, 0, output)
- return output
+    pts_list = [np.array(pts, dtype=np.int32)]  # Convert the input `pts` to the correct format
+    cv2.fillPoly(overlay, pts_list, color)
+    output = cv2.addWeighted(overlay, alpha, output, 1 - alpha, 0, output)
+    return output
 
-
-
-"""
- Generate random colors for visual distinction.
-
- Parameters:
- - N: Number of colors to generate.
- - bright: If True, generate bright and vivid colors; otherwise, generate more muted colors.
-
- Returns:
- - A list of RGB colors in the form (R, G, B).
-
- This function generates random colors in HSV color space and then converts them to RGB
- to create a visually distinct set of colors. The `N` parameter specifies the number of colors
- to generate, and `bright` controls whether the colors are bright or more muted. The function
- returns a list of RGB colors that can be used for various purposes, such as visualizing
- distinct objects in an image.
- """
 def random_colors(N, bright=True):
- brightness = 255 if bright else 180
- hsv = [(i / N + 1, 1, brightness) for i in range(N + 1)]
- colors = list(map(lambda c: colorsys.hsv_to_rgb(*c), hsv))
- random.shuffle(colors)
- return colors 
-
-
-
+    brightness = 255 if bright else 180
+    hsv = [(i / N + 1, 1, brightness) for i in range(N + 1)]
+    colors = list(map(lambda c: colorsys.hsv_to_rgb(*c), hsv))
+    random.shuffle(colors)
+    return colors 
 
 
 class_names = ['Fibre', 'Vessel']  # We have two class in custom dataset.
 img = original_img.copy() # Create a copy of the original image to work on
 
-bboxes, classes, segmentations, scores, area = detect(model, img)
+bboxes, classes, segmentations, scores = detect(model, img)
 colors = random_colors(len(bboxes))
 list2=[]
-for i, (bbox, class_id, seg, score, area) in enumerate(zip(bboxes, classes, segmentations, scores, area)):
+for i, (bbox, class_id, seg, score) in enumerate(zip(bboxes, classes, segmentations, scores)):
     color = colors[i]
-    # Extract information for each detected object
-    # print("bbox:", bbox, "class id:", class_id, "seg:", seg, "score:", score)
-    (x, y, x2, y2) = bbox       # Unpack bounding box coordinates and segmentation points
-    rect = cv2.minAreaRect(seg)  # Calculate the minimum area rectangle (rotated rectangle) that encloses the segmentation. 
-    box1 = cv2.boxPoints(rect)  # Get the four corners of the rotated rectangle
-    box1 = np.int0(box1)
-    #print(box1)
-    # Calculate the lengths of two sides of the rotated rectangle
-    a,b,c,d=box1
-    dst1= ((a[0] - b[0])**2 + (a[1] - b[1])**2)**0.5
-    dst2 = ((b[0] - c[0])**2 + (b[1] - c[1])**2)**0.5
+    (x, y, x2, y2) = bbox 
+    h, w = seg.shape
+    mask_3channel = cv2.merge((seg, seg, seg))
+    # Get the size of the original image (height, width, channels)
+    h2, w2, c2 = img.shape
+    # Resize the mask to the same size as the image
+    x = cv2.resize(seg, (w2, h2)).astype('uint8')
+    # Find contours in the mask
+    d = cv2.findContours(x, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
+    if d:    
+        cntsSorted = sorted(d, key=lambda x: cv2.contourArea(x) , reverse =  True)
+        
+    if d: 
+        largest_contour = cntsSorted[0] 
+    mask = cv2.resize(mask_3channel, (w2, h2)).astype(int)
+
+    ### Length Calculation 
+
+    # Create a blank image with the same dimensions as the mask, but with 3 channels (RGB)
+    drawing = np.zeros((mask.shape[0], mask.shape[1], 3))
+    # Draw the largest contour from the mask onto the drawing image and fill it with green color
+    cv2.drawContours(drawing, [cntsSorted[0]] , -1 , color = (0,255,0) , thickness = cv2.FILLED)
+    drawing = drawing.astype(np.uint8)
+    drawing = cv2.cvtColor(drawing, cv2.COLOR_BGR2GRAY)
+    # Apply the Zhang-Suen thinning algorithm to the grayscale drawing to obtain a skeleton
+    thinned = cv2.ximgproc.thinning(drawing, thinningType = cv2.ximgproc.THINNING_ZHANGSUEN)
     
-    # Choose the longer side as the length. conversion scale also applied here  (1 px = 0.65 mm)
-    dst1 = dst1 * 0.65
-    dst2 = dst2 * 0.65
-    if dst1 > dst2:
-      Length = dst1
-    else:
-      Length = dst2
+    skeleton = thinned
     
-    # Area and adjust via conversion scale in mm
-    area_px = area * 0.65
-    # Average Width is calculated
-    Width = round(area_px/Length, 2)
+    # Initialize an instance of the FilFinder2D class with the skeleton, a distance parameter, and the skeleton as the mask
+    fil = FilFinder2D(skeleton, distance=250 * u.pc, mask=skeleton)
+    # Preprocess the image or skeleton by flattening the intensity values
+    fil.preprocess_image(flatten_percent=85)
+    fil.create_mask(border_masking=True, verbose=False,
+    use_existing_mask=True)
+    fil.medskel(verbose=False)
+    fil.analyze_skeletons(branch_thresh=40* u.pix, skel_thresh=10 * u.pix, prune_criteria='length')
+    # Assign the longest path or skeleton from the FilFinder2D instance to the 'mask' variable
+    mask = fil.skeleton_longpath
+    Length = np.sum(mask)
+
+    #print(f' Object Length is: {length:.2f}')
     
-    # Store all these information into the list to generate excel sheet.
-    list1 = class_names[class_id], Length, Width, area_px
+    ### Width Calculation 
+
+    # Compute the distance transform
+    dist_transform = cv2.distanceTransform(drawing, cv2.DIST_L2, 5)
+
+    # Find the maximum value in the distance transform
+    max_dist = np.max(dist_transform)
+
+    # The maximum value corresponds to the thickness of the thickest part of the fiber
+    fiber_thickness = max_dist * 2
+    Width = round(max_dist * 2, 2)
+
+    #print(f"Object Width is: {fiber_thickness:.2f} pixels")
+    
+    Area = cv2.contourArea(cntsSorted[0])
+   # print(f" Object Area is: {Area:.2f} pixels")
+    
+    list1 = class_names[class_id], Length, Width, Area
     list2.append(list1)
-    
-    
-    #cv2.drawContours(img, [seg], 0, (0, 255, 0), 2)
-    #cv2.drawContours(img, [bbox], 0, (0, 0, 255), 2)
-    #cv2.rectangle(img, (x, y), (x2, y2), colors[class_id], 2)
-    
-    
-    # Draw the object mask on the image using the object's class color
-    img = draw_mask(img, [seg], color)
-    #cv2.rectangle(img, (a, b), (c, d), (255, 0, 0), 2)
-    
-    # Draw the rotated rectangle around the object
-    cv2.drawContours(img,[box1],0, (255, 0, 255),2)
-    cv2.putText(img, class_names[class_id], (a[0], a[1] + 30), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 2) # displaying label using BBox
-    
 
+    cnt = cntsSorted[0].reshape(-1, 2)
 
+    img = draw_mask(img, [cnt], color)
+    
 fig, axes = plt.subplots(1, 2, figsize=(12, 6)) # # Create a subplot with two columns for side-by-side display, specifying the figure size
 
 # Display the original image on the left
@@ -216,3 +170,10 @@ axes[1].axis('off')
 plt.show()
 
 
+df = pd.DataFrame(list2)   # Create a DataFrame from the 'list2' data
+df1 = df.rename(columns={0: 'Class Name',1: 'Length', 2: 'Width', 3: 'Area'})    # Rename the columns for clarity
+excel_file_name = image_base_name + "_summary.xlsx"     # Define the name of the Excel file to be generated
+df1.to_excel(excel_file_name, index=False)  # Save the DataFrame as an Excel file
+
+# Print a message to confirm the creation of the Excel file
+print(f"Excel file '{excel_file_name}' has been created.")
