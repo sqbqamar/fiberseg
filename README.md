@@ -11,7 +11,7 @@ Python 3.8 or later with all [requirements.txt](requirements.txt) dependencies i
 ```bash
 $ pip install -r requirements.txt
 ```
-## Train YOLOv8 with Custom Dataset
+## Train YOLOv8 with plant dataset
 Just open the Train_custom_data.ipynb file on Google Colab or the local system and follow the instructions as written in the file.  
 [Open Training file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/Train_custom_data.ipynb)
 
