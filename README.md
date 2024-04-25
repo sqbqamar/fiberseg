@@ -69,5 +69,7 @@ input_data = cv2.imread("Path/to/your image")
 ## Conversion scale 
 We did not set the conversion ratio of each pixel because the pixel size varies across different microscopy images.
 In our case, we found that 1 pixel = 0.65 mm, but we could not use this ratio for calculations in the original manuscript.
+
+You can use the `conversion.py` file to change the values in the Excel file according to your microscopic standard. Just update the conversion value on Line 13 in the code.
  
 
