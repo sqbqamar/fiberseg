@@ -13,8 +13,8 @@ tqdm>=4.64.0
 #ultralytics==8.0.89
 pandas>=1.1.4
 seaborn>=0.11.0
-astropy
-fil_finder
+#astropy
+#fil_finder
 psutil  # system utilization
 py-cpuinfo  # display CPU info
 #thop>=0.1.1  # FLOPs computation
