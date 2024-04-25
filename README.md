@@ -1,4 +1,4 @@
-# Yolov8 Flask API for Fiber Segmentation
+# Deep Learning for Fiber Segmentation
 
 This code is based on the YOLOv8 from Ultralytics and it has all the functionalities that the original code has:
 - Source: images
