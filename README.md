@@ -15,6 +15,8 @@ $ pip install -r requirements.txt
 Just open the Train_custom_data.ipynb file on Google Colab or the local system and follow the instructions as written in the file.  
 [Open Training file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/Train_custom_data.ipynb)
 
+Specially, set `overlap_mask=False` to get the individual mask for each instance, even when instances overlap with each other.
+
 ## Prediction by trained model
 
 `prediction.py` can deal with images and can run into the CPU, but it is highly recommendable to run in GPU.
