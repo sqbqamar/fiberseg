@@ -20,8 +20,8 @@ COPY image /home/jovyan/
 COPY Result /home/jovyan/
 COPY best.pt /home/jovyan/
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --upgrade astropy
-RUN pip install fil-finder
+RUN pip install astropy
+RUN pip install fil-finder==1.7
 
 #RUN pip install torch==1.13.0+cpu --extra-index-url https://download.pytorch.org/whl/cpu
 RUN pip install torch==2.0.1+cpu --index-url https://download.pytorch.org/whl/cpu
