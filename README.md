@@ -27,6 +27,7 @@ Usage - sources:
  ```   
 [Open Prediction file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/prediction_file.ipynb)
 
+## Generate individual masks and save them to the designated folder
 
 `mask_generator.py` generates individual mask instances for the objects detected by the model. Each mask instance is positioned at the actual location of the corresponding object in the image. The size of the mask image is equal to the size of the original image. This will help in accurately calculating the length and width of the masks in pixels.
 
