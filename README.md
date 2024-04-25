@@ -27,6 +27,9 @@ Usage - sources:
  ```   
 [Open Prediction file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/prediction_file.ipynb)
 
+
+`mask_generator.py` generates individual mask instances for the objects detected by the model. Each mask instance is positioned at the actual location of the corresponding object in the image. The size of the mask image is equal to the size of the original image. This will help in accurately calculating the length and width of the masks in pixels.
+
 ## Interactive implementation
 
 You can deploy the API to label in an interactive way.
@@ -64,6 +67,7 @@ input_data = cv2.imread("Path/to/your image")
 
 
 ## Conversion scale 
-We set the conversion ratio of each pixel 
-1 px = 0.425 mm
+We did not set the conversion ratio of each pixel because the pixel size varies across different microscopy images.
+In our case, we found that 1 pixel = 0.65 mm, but we could not use this ratio for calculations in the original manuscript.
+ 
 
