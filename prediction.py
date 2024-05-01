@@ -5,6 +5,7 @@ Created on Thu Apr 25 13:43:24 2024
 @author: drsaq
 """
 
+import argparse
 from ultralytics import YOLO
 import numpy as np
 from PIL import Image
