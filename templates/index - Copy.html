@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fiber Segmentation API</title>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="shortcut icon" href="https://cdn.icon-icons.com/icons2/3913/PNG/512/flask_logo_icon_248540.png" type="image/x-icon">
+  <style>
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      margin: 0;
+	  background-color: #ffffff;
+    }
+
+    #container {
+      display: block;
+      margin: auto;
+      width: 100%;
+    }
+
+    .img-container,
+    img {
+      display: block;
+      margin-top: 32px;
+      width: 50%;
+      min-width: 360px;
+    }
+
+    #output {
+      background-color: #1f3569;
+      padding: 15px;
+    }
+
+    .uploadOuter {
+      text-align: left;
+      padding: 20px;
+      margin-top: 64px;
+    }
+
+    .uploadOuter strong {
+      padding: 0 10px;
+    }
+
+    .dragBox {
+      width: 500px;
+      height: 200px;
+      margin: 32px auto;
+      position: relative;
+      text-align: center;
+      font-weight: bold;
+      line-height: 200px;
+      color: #999;
+      border: 2px dashed #ccc;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s;
+    }
+
+    .dragBox input[type="file"] {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      top: 0;
+      left: 0;
+    }
+
+    .draging {
+      transform: scale(1.1);
+    }
+
+    #preview {
+      display: flex;
+      justify-content: center;
+    }
+    #preview img {
+      max-width: 100%
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      margin-bottom: 0;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.42857143;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      -ms-touch-action: manipulation;
+      touch-action: manipulation;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      background-image: none;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background-color: #1f3569;
+      ;
+    }
+
+    #upload-btn {
+      text-align: center;
+      margin: 32px auto;
+      width: 200px;
+      height: 48px;
+      display: none;
+    }
+
+    #upload-btn[disabled] {
+      opacity: .6;
+      cursor: progress;
+    }
+
+    p#preview-text {
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .form-group {
+      max-width: 400px;
+      margin-top: 32px;
+      margin: 32px auto;
+      margin-top: 32px;
+    }
+
+    #progress-container {
+      display: none;
+    }
+
+    .progress-bar {
+      background-color: #1f3569;
+    }
+    footer .disclaimer{
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+  <head>
+    <meta charset="utf-8">
+    <title>Numberplate OCR</title>
+  </head>
+  <body>
+    <header>
+      <h1>Numberplate Reader</h1>
+    </header>
+    <main>
+  <div class="container is-fluid">
+    <h1>Body Content</h1>
+  </div>
+
+
+<form action="#" method="POST" enctype="multipart/form-data">
+  <input class="file-input" type="file" name="image_name" required>
+  <button class="button is-info" type="submit">Submit</button>
+</form>
+
+
+    <div class="container">
+      <br/><br/>
+      <table>
+        <tr>
+          <td>
+            <img class="float-left img-fluid" src="/static/upload/{{ upload_image }}" alt="Source Image" />
+          </td>
+          <td>
+            <img class="float-right img-fluid" src="/static/prediction/{{ image1 }}" alt="Prediction Image" />
+          </td>
+        </tr>
+      </table>
+     
+    </div>
+
+
+</main>
+    <footer></footer>
+  </body>
+</html>
+
+

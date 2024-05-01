@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fiber Segmentation API</title>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="shortcut icon" href="https://cdn.icon-icons.com/icons2/3913/PNG/512/flask_logo_icon_248540.png" type="image/x-icon">
+  <style>
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      margin: 0;
+	  background-color: #ffffff;
+    }
+
+    #container {
+      display: block;
+      margin: auto;
+      width: 100%;
+    }
+
+    .img-container,
+    img {
+      display: block;
+      margin-top: 32px;
+      width: 50%;
+      min-width: 360px;
+    }
+
+    #output {
+      background-color: #1f3569;
+      padding: 15px;
+    }
+
+    .uploadOuter {
+      text-align: left;
+      padding: 20px;
+      margin-top: 64px;
+    }
+
+    .uploadOuter strong {
+      padding: 0 10px;
+    }
+
+    .dragBox {
+      width: 500px;
+      height: 200px;
+      margin: 32px auto;
+      position: relative;
+      text-align: center;
+      font-weight: bold;
+      line-height: 200px;
+      color: #999;
+      border: 2px dashed #ccc;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s;
+    }
+
+    .dragBox input[type="file"] {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      top: 0;
+      left: 0;
+    }
+
+    .draging {
+      transform: scale(1.1);
+    }
+
+    #preview {
+      display: flex;
+      justify-content: center;
+    }
+    #preview img {
+      max-width: 100%
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      margin-bottom: 0;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.42857143;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      -ms-touch-action: manipulation;
+      touch-action: manipulation;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      background-image: none;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background-color: #1f3569;
+      ;
+    }
+
+    #upload-btn {
+      text-align: center;
+      margin: 32px auto;
+      width: 200px;
+      height: 48px;
+      display: none;
+    }
+
+    #upload-btn[disabled] {
+      opacity: .6;
+      cursor: progress;
+    }
+
+    p#preview-text {
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .form-group {
+      max-width: 400px;
+      margin-top: 32px;
+      margin: 32px auto;
+      margin-top: 32px;
+    }
+
+    #progress-container {
+      display: none;
+    }
+
+    .progress-bar {
+      background-color: #1f3569;
+    }
+    footer .disclaimer{
+      font-size: 12px;
+    }
+  </style>
+ <style>
+    .download-button {
+      float: right;
+      /* Add any additional styles you need here */
+    }
+  </style>
+</head>
+  <body>
+  <header>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="img-container">
+            <img id="logo_flask" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" alt="">
+            <br />
+          </div>
+        </div>
+        <div class="col-md-4 offset-md-4">
+        </div>
+      </div>
+    </div>
+  </header>
+       <main>
+  <div class="container is-fluid">
+<br>
+    <h1>Web Application for Fiber Segmentation</h1>
+<br>
+<p class="text-left">
+                This API is based on the YOLOv8 code from Ultralytics. We have used Flask API for web based application. </a>.
+                <p>Files supported are the common formats of images and videos that YOLOv8 also support: ('tif', 'jpg', 'jpeg', 'webp',... and 'avi', 'gif', 'mp4', ...)<p>
+                <p>The algorithm will return to you a labeled image with all the objects detected/segmented by trained model using custom data.<p>
+                
+				
+			<p><strong>Instructions:</strong><p>
+            <p><strong>1)</strong> Use the "Choose file" button to select the file<p>
+            <p><strong>2)</strong> Press "Submit" button to upload a file for prediction<p>
+			<p><strong>3)</strong> Image, prediction, and its summary in an Excel file are shown in the result<p>
+              </p>
+  </div>
+
+
+<div style="text-align: center; margin-top: 70px;">
+  <form action="#" method="POST" enctype="multipart/form-data">
+    <input class="file-input" type="file" name="image_name" required>
+    <button class="button is-info" type="submit">Submit</button>
+  </form>
+</div>
+
+
+    <div class="container">
+    <a class="download-button" href="/static/xls_file/{{xls_filename}}" >download>{{ xls_filename }}</a>
+      <br/><br/>
+      <table>
+        <tr>
+          <td>
+            <figure>
+			<figcaption style="text-align: left;">Source Image</figcaption>
+    <img class="float-left img-fluid" src="/static/upload/{{ upload_image }}" />
+  </figure>
+          </td>
+          <td>
+            <figure>
+    <figcaption style="text-align: left;">Prediction Image</figcaption>
+	<img class="float-right img-fluid" src="{{ image1 }}" />
+  </figure>
+          </td>
+        </tr>
+      </table>
+     
+    </div>
+
+
+</main>
+    <footer></footer>
+  </body>
+</html>
+
+
