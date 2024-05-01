@@ -69,7 +69,7 @@ def random_colors(N, bright=True):
 class_names = ['Fibre', 'Vessel']
 colors = random_colors(len(class_names))
 
-model = YOLO("C:/Users/drsaq/Downloads/best.pt")
+model = YOLO("best.pt")
 
 def measure(model, path):
     img = cv2.imread(path)
