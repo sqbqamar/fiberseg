@@ -23,7 +23,7 @@ Specially, set `overlap_mask=False` to get the individual mask for each instance
 
 ```bash
 Usage - sources:
-    $ python prediction.py --weights best.pt --source 'image/131.jpg'                          
+    $ python prediction_cmd.py --weights best.pt --source 'image/131.jpg'                          
  ```   
 [Open Prediction file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/prediction_file.ipynb)
 
