@@ -6,7 +6,7 @@ This code is based on the YOLOv8 from Ultralytics and it has all the functionali
 
 ## Requirements
 
-Python 3.8 or later with all [requirements.txt](requirements.txt) dependencies installed, including `torch>=1.7`. To install run:
+Python 3.8 or later with all [req.txt](req.txt) dependencies installed, including `torch>=1.7`. To install run:
 
 ```bash
 $ pip install -r requirements.txt
