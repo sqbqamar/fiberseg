@@ -18,10 +18,21 @@ import matplotlib.pyplot as plt
 from fil_finder import FilFinder2D
 import astropy.units as u
 
-model = YOLO("best.pt") 
+parser = argparse.ArgumentParser()
+parser.add_argument('--weights', type=str, required=True, help='Path to the model weights file')
+parser.add_argument('--source', type=str, required=True, help='Path to the input image file')
+args = parser.parse_args()
+
+# Load the model with the specified weights
+model = YOLO(args.weights)
 
 # Define the path to the input image
-original_img = "131.jpg"
+original_img = args.source
+
+#model = YOLO("best.pt") 
+
+# Define the path to the input image
+#original_img = "131.jpg"
 
 # Extract the base name of the input image file without the extension
 image_base_name = os.path.splitext(os.path.basename(original_img))[0]
