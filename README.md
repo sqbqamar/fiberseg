@@ -9,7 +9,7 @@ This code is based on the YOLOv8 from Ultralytics and it has all the functionali
 Python 3.8 or later with all [req.txt](req.txt) dependencies installed, including `torch>=1.7`. To install run:
 
 ```bash
-$ pip install -r requirements.txt
+$ pip install -r req.txt
 ```
 ## Train YOLOv8 with plant dataset
 Just open the Train_custom_data.ipynb file on Google Colab or the local system and follow the instructions as written in the file.  
