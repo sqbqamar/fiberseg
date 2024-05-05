@@ -28,10 +28,10 @@ import astropy.units as u
 app = Flask(__name__)
 
 
-def detect(model, img, imgsz):
+def detect(model, img, imgsz, image_base_name):
         # Get img shape
    # height, width, channels = img.shape
-    results = model.predict(source=img.copy(), project="Result", name="pred", overlap_mask=False, imgsz=imgsz, save=True, iou=0.8, conf=0.6, save_txt=False)
+    results = model.predict(source=img.copy(), project="Result", name=f"pred_{image_base_name}", overlap_mask=False, imgsz=imgsz, save=True, exist_ok=True, iou=0.8, conf=0.6, save_txt=False)
     result = results[0]
         
     # Extract Masks, bounding boxes, class IDs, and scores from the result
@@ -67,11 +67,12 @@ def random_colors(N, bright=True):
     return colors 
 
 class_names = ['Fibre', 'Vessel']
-colors = random_colors(len(class_names))
+num_colors = 1000
+colors = random_colors(num_colors)
 
 model = YOLO("best.pt")
 
-def measure(model, path):
+def measure(model, path, image_base_name):
     img = cv2.imread(path)
     height, width, channels = img.shape
         
@@ -86,7 +87,7 @@ def measure(model, path):
         imgsz = 2048  
         
     list2=[]
-    bboxes, classes, segmentations, scores = detect(model, img, imgsz)
+    bboxes, classes, segmentations, scores = detect(model, img, imgsz, image_base_name)
     #bboxes, classes, segmentations, scores, area = detect(model, img, imgsz)
     for i, (bbox, class_id, seg, score) in enumerate(zip(bboxes, classes, segmentations, scores)):
     # print("bbox:", bbox, "class id:", class_id, "seg:", seg, "score:", score)
@@ -210,9 +211,9 @@ def application():
     if request.method == 'POST':
         # Take uploaded image
         upload_file = request.files['image_name']
-        nowTime = datetime.now().strftime("%Y%m%d%H%M%S")
+        #nowTime = datetime.now().strftime("%Y%m%d%H%M%S")
         
-        filename = nowTime + '_' + upload_file.filename
+        filename = upload_file.filename
         path_save = os.path.join(UPLOAD_PATH, filename)
         # Store image in upload directory
         upload_file.save(path_save)
@@ -230,7 +231,7 @@ def application():
                         except OSError:
                             pass
             
-        img, df1 = measure(model, path_save)
+        img, df1 = measure(model, path_save, image_base_name)
         directory_path = 'static/Result' # Replace with the actual directory path
         recent_folder = find_most_recent_folder(directory_path)
         image_path = find_most_recent_image_in_folder(recent_folder)
