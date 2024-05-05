@@ -18,10 +18,22 @@ import matplotlib.pyplot as plt
 from fil_finder import FilFinder2D
 import astropy.units as u
 
+
+parser = argparse.ArgumentParser(description='Object Detection and Measurement')
+parser.add_argument('--weights', type=str, default='best.pt', help='Path to the model weights')
+parser.add_argument('--source', type=str, default='image/131.jpg', help='Path to the input image')
+parser.add_argument('--mask', action='store_true', help='Save segmentation masks')
+parser.add_argument('--mask-dir', type=str, default='cmasks', help='Directory to save segmentation masks')
+parser.add_argument('--conversion', type=float, default=0.65, help='Conversion factor for pixel to standard units')
+
+args = parser.parse_args()
+
+#default_mask_dir = 'C:/Users/drsaq/OneDrive/Desktop/fiberseg-main/cmasks'
+
 model = YOLO("best.pt") 
 
 # Define the path to the input image
-original_img = "131.jpg"
+original_img = "image/131.jpg"
 
 # Extract the base name of the input image file without the extension
 image_base_name = os.path.splitext(os.path.basename(original_img))[0]
@@ -96,6 +108,8 @@ for i, (bbox, class_id, seg, score) in enumerate(zip(bboxes, classes, segmentati
     h2, w2, c2 = img.shape
     # Resize the mask to the same size as the image
     x = cv2.resize(seg, (w2, h2)).astype('uint8')
+    
+    
     # Find contours in the mask
     d = cv2.findContours(x, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
     if d:    
@@ -103,7 +117,18 @@ for i, (bbox, class_id, seg, score) in enumerate(zip(bboxes, classes, segmentati
         
     if d: 
         largest_contour = cntsSorted[0] 
-    mask = cv2.resize(mask_3channel, (w2, h2)).astype(int)
+    mask = cv2.resize(mask_3channel, (w2, h2))
+    #mask = cv2.resize(mask_3channel, (w2, h2)).astype(int)
+    
+    #plt.imshow(mask)
+    if args.mask:
+        mask_folder_path = args.mask_dir if args.mask_dir else default_mask_dir
+        #mask_folder_path = os.path.join(os.getcwd(), args.mask_dir)
+        os.makedirs(mask_folder_path, exist_ok=True)
+        mask_filename = f"{i}.png"
+        mask_path = os.path.join(mask_folder_path, mask_filename)
+        cv2.imwrite(mask_path, mask * 255)
+    
 
     ### Length Calculation 
 
@@ -155,7 +180,9 @@ for i, (bbox, class_id, seg, score) in enumerate(zip(bboxes, classes, segmentati
     cnt = cntsSorted[0].reshape(-1, 2)
 
     img = draw_mask(img, [cnt], color)
+ 
     
+"""
 fig, axes = plt.subplots(1, 2, figsize=(12, 6)) # # Create a subplot with two columns for side-by-side display, specifying the figure size
 
 # Display the original image on the left
@@ -170,11 +197,26 @@ axes[1].axis('off')
 
 plt.show()
 
+"""
+
 
 df = pd.DataFrame(list2)   # Create a DataFrame from the 'list2' data
 df1 = df.rename(columns={0: 'Class Name',1: 'Length', 2: 'Width', 3: 'Area'})    # Rename the columns for clarity
-excel_file_name = image_base_name + "_summary.xlsx"     # Define the name of the Excel file to be generated
+excel_file_name = image_base_name + "_summary_px.xlsx"     # Define the name of the Excel file to be generated
 df1.to_excel(excel_file_name, index=False)  # Save the DataFrame as an Excel file
 
 # Print a message to confirm the creation of the Excel file
-print(f"Excel file '{excel_file_name}' has been created.")
+print(f"Excel file '{excel_file_name}' in pixels has been created.")
+
+
+
+# Multiply the values in the 'Length', 'Width', and 'Area' columns by conversion_value
+df1['Length'] = df1['Length'] * args.conversion
+df1['Width'] = df1['Width'] * args.conversion
+df1['Area'] = df1['Area'] * args.conversion
+
+excel_file_name = image_base_name + "_summary_micron.xlsx"
+# Write the modified DataFrame back to the Excel file
+df1.to_excel(excel_file_name, index=False) 
+
+print(f"Excel file '{excel_file_name}' in standard values has been created.")
