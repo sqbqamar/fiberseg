@@ -1,0 +1,10 @@
+name: fiberseg
+dependencies:
+  - pip
+  - pip:
+    - ultralytics==8.0.89
+    - fil-finder
+    - astropy==5.3.4
+    - opencv-contrib-python
+    - flask
+    - openpyxl
