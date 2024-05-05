@@ -5,7 +5,7 @@ This code is based on the YOLOv8 from Ultralytics and it has all the functionali
 - Supported weight: Pytorch
 
 ## Requirements
-First, create a conda environment to install the required libraries. Use the 'Fiberseg_env.yml' file to install the necessary libraries.
+First, create a conda environment to install the required libraries. Use the [Fiberseg_env.yml](Fiberseg_env.yml) file to install the necessary libraries.
 ```bash
 $ conda env create -f Fiberseg_env.yml
 
