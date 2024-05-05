@@ -23,8 +23,10 @@ Specially, set `overlap_mask=False` to get the individual mask for each instance
 
 ```bash
 Usage - sources:
-    $ python prediction_cmd.py --weights best.pt --source 'image/131.jpg'                          
- ```   
+    $ python prediction.py --weights best.pt --source 'image/131.jpg' --mask --conversion 0.65                       
+ ```
+In command line arguments, we load the model with the specified weights using the `--weight` argument and `--source` to specify the input image variable. The `--mask` argument is used to generate the masks and save them in the folder. The `--conversion` argument is used as the conversion factor when converting pixel values to standard units.
+
 [Open Prediction file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/prediction_file.ipynb)
 
 ## Generate individual masks and save them to the designated folder
