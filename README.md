@@ -1,7 +1,7 @@
 # Deep Learning for Fiber Segmentation
 
 This code is based on the YOLOv8 from Ultralytics and it has all the functionalities that the original code has:
-- Source: images
+- Source: Images
 - Supported weight: Pytorch
 
 ## Requirements
