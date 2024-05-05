@@ -11,7 +11,7 @@ $ conda env create -f Fiberseg_env.yml
 
 $ conda activate fiberseg
 ```
-## Train YOLOv8 with plant dataset
+## Train Model with dataset
 Just open the Train_custom_data.ipynb file on Google Colab or the local system and follow the instructions as written in the file.  
 [Open Training file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/Train_custom_data.ipynb)
 
@@ -19,7 +19,7 @@ Specially, set `overlap_mask=False` to get the individual mask for each instance
 
 ## Prediction by trained model
 
-`prediction.py` can deal with images and can run into the CPU, but it is highly recommendable to run in GPU.
+`prediction.py` can deal with images and run into the CPU `devive='cpu'`, but it is recommendable to run in GPU, just set `devive=0`.
 
 ```bash
 Usage - sources:
@@ -31,7 +31,7 @@ In command line arguments, we load the model with the specified weights using th
 
 ## Generate individual masks and save them to the designated folder
 
-`mask_generator.py` generates individual mask instances for the objects detected by the model. Each mask instance is positioned at the actual location of the corresponding object in the image. The size of the mask image is equal to the size of the original image. This will help in accurately calculating the length and width of the masks in pixels.
+I uploaded `mask_generator.py` to generate individual mask instances for the objects detected by the model. Each mask instance is positioned at the actual location of the corresponding object in the image. The size of the mask image is equal to the size of the original image. This will help in accurately calculating the length and width of the masks in pixels. However, this function is included in the `prediction.py`.
 
 ## Interactive implementation
 
@@ -71,8 +71,8 @@ input_data = cv2.imread("Path/to/your image")
 
 ## Conversion scale 
 We did not set the conversion ratio of each pixel because the pixel size varies across different microscopy images.
-In our case, we found that 1 pixel = 0.65 mm, but we could not use this ratio for calculations in the original manuscript.
+In our case, we found that 1 pixel = 0.65 mm, but we use this ratio for calculations in the original manuscript.
 
-You can use the `conversion.py` file to change the values in the Excel file according to your microscopic standard. Just update the conversion value on Line 13 in the code.
+I uploaded separate `conversion.py` file to change the values in the Excel file according to your microscopic standard. Just update the conversion value on Line 13 in the code. However, this function is included in the `prediction.py`.
  
 
