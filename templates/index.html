@@ -174,14 +174,14 @@
 <br>
 <p class="text-left">
                 This API is based on the YOLOv8 code from Ultralytics. We have used Flask API for web based application. </a>.
-                <p>Files supported are the common formats of images and videos that YOLOv8 also support: ('tif', 'jpg', 'jpeg', 'webp',... and 'avi', 'gif', 'mp4', ...)<p>
+                <p>Files supported are the common formats of images and videos that YOLOv8 also support: ('tif', 'jpg', 'jpeg',...)<p>
                 <p>The algorithm will return to you a labeled image with all the objects detected/segmented by trained model using custom data.<p>
                 
 				
 			<p><strong>Instructions:</strong><p>
             <p><strong>1)</strong> Use the "Choose file" button to select the file<p>
             <p><strong>2)</strong> Press "Submit" button to upload a file for prediction<p>
-			<p><strong>3)</strong> Image, prediction, and its summary in an Excel file are shown in the result<p>
+			<p><strong>3)</strong> Image, prediction, and its summary are shown as a output<p>
               </p>
   </div>
 
@@ -209,6 +209,7 @@
             <figure>
     <figcaption style="text-align: left;">Prediction Image</figcaption>
 	<img class="float-right img-fluid" src="{{ image1 }}" />
+	<a href="{{ image1 }}" download>Download Prediction</a>
   </figure>
           </td>
         </tr>
