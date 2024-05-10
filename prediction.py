@@ -23,17 +23,14 @@ parser = argparse.ArgumentParser(description='Object Detection and Measurement')
 parser.add_argument('--weights', type=str, default='best.pt', help='Path to the model weights')
 parser.add_argument('--source', type=str, default='image/131.jpg', help='Path to the input image')
 parser.add_argument('--mask', action='store_true', help='Save segmentation masks')
-parser.add_argument('--mask-dir', type=str, default='cmasks', help='Directory to save segmentation masks')
+parser.add_argument('--display', action='store_true', help='Display the segmentation results instead of only saving then')
 parser.add_argument('--conversion', type=float, default=0.65, help='Conversion factor for pixel to standard units')
 
 args = parser.parse_args()
 
-#default_mask_dir = 'C:/Users/drsaq/OneDrive/Desktop/fiberseg-main/cmasks'
-
-model = YOLO("best.pt") 
-
-# Define the path to the input image
-original_img = "image/131.jpg"
+# Paths to model weigths and source image
+model = YOLO(args.weights)
+original_img = args.source
 
 # Extract the base name of the input image file without the extension
 image_base_name = os.path.splitext(os.path.basename(original_img))[0]
@@ -62,7 +59,7 @@ if imgsz is None:
 
 def detect(model, img):
     # Perform instance segmentation and store the results in the "results" variable
-    results = model.predict(source=img.copy(), project="Result", name="pred", overlap_mask=False, imgsz=imgsz, save=True, iou=0.8, conf=0.6, save_txt=False)
+    results = model.predict(source=img.copy(), project="Result", name=f"pred_{image_base_name}", overlap_mask=False, imgsz=imgsz, save=True, exist_ok=True, iou=0.8, conf=0.6, save_txt=False)
     result = results[0]
         
     # Extract Masks, bounding boxes, class IDs, and scores from the result
@@ -73,7 +70,7 @@ def detect(model, img):
     points = result.masks.xy
     
     # Return the detected bounding boxes, class IDs, segments, and scores
-    return bboxes, points,class_ids, segment, scores
+    return bboxes, points, class_ids, segment, scores
 
 def draw_mask(img, pts, color, alpha=0.5):
     h, w, _ = img.shape
@@ -100,6 +97,7 @@ img = original_img.copy() # Create a copy of the original image to work on
 bboxes, points, classes, segmentations, scores = detect(model, img)
 colors = random_colors(len(bboxes))
 list2=[]
+
 for i, (bbox, point, class_id, seg, score) in enumerate(zip(bboxes, points, classes, segmentations, scores)):
     rect = cv2.minAreaRect(point)
     box1 = cv2.boxPoints(rect)
@@ -109,7 +107,7 @@ for i, (bbox, point, class_id, seg, score) in enumerate(zip(bboxes, points, clas
               #print(f"Skipping object {i+1} as it touches the image boundary.")
         continue
     color = colors[i]
-    (x, y, x2, y2) = bbox 
+    #(x, y, x2, y2) = bbox 
     h, w = seg.shape
     mask_3channel = cv2.merge((seg, seg, seg))
     # Get the size of the original image (height, width, channels)
@@ -130,10 +128,9 @@ for i, (bbox, point, class_id, seg, score) in enumerate(zip(bboxes, points, clas
     
     #plt.imshow(mask)
     if args.mask:
-        mask_folder_path = args.mask_dir
-        #mask_folder_path = os.path.join(os.getcwd(), args.mask_dir)
+        mask_folder_path = f'Result/pred_{image_base_name}/cmasks'
         os.makedirs(mask_folder_path, exist_ok=True)
-        mask_filename = f"{i}.png"
+        mask_filename = f"{image_base_name}_{i}.png"
         mask_path = os.path.join(mask_folder_path, mask_filename)
         cv2.imwrite(mask_path, mask * 255)
     
@@ -188,35 +185,51 @@ for i, (bbox, point, class_id, seg, score) in enumerate(zip(bboxes, points, clas
     cnt = cntsSorted[0].reshape(-1, 2)
 
     img = draw_mask(img, [cnt], color)
- 
-    
-"""
-fig, axes = plt.subplots(1, 2, figsize=(12, 6)) # # Create a subplot with two columns for side-by-side display, specifying the figure size
 
-# Display the original image on the left
-axes[0].imshow(cv2.cvtColor(original_img, cv2.COLOR_BGR2RGB))
-axes[0].set_title("Original Image")
-axes[0].axis('off')
 
-# Display the predicted image on the right
-axes[1].imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-axes[1].set_title("Predicted Image")
-axes[1].axis('off')
+# Save color label image
+color_img_filename = image_base_name + "_colorLabels.jpg" 
+color_img_path = os.path.join(f'Result/pred_{image_base_name}', color_img_filename)
+cv2.imwrite(color_img_path, img)
+            
+# Load and rename bbox prediciton image
+bbox_img = cv2.imread(f'Result/pred_{image_base_name}/image0.jpg')
+bbox_img_filename = image_base_name + "_bboxPred.jpg" 
+bbox_img_path = os.path.join(f'Result/pred_{image_base_name}', bbox_img_filename)
+cv2.imwrite(bbox_img_path, bbox_img)
 
-plt.show()
+original_image_path = f'Result/pred_{image_base_name}/image0.jpg'
+os.remove(original_image_path)
 
-"""
+if args.display:
+    fig, axes = plt.subplots(1, 3, figsize=(12, 6)) # # Create a subplot with two columns for side-by-side display, specifying the figure size
+
+    # Display the original image on the left
+    axes[0].imshow(cv2.cvtColor(original_img, cv2.COLOR_BGR2RGB))
+    axes[0].set_title("Original Image")
+    axes[0].axis('off')
+
+    # Display the predicted image with bboxes in the middle
+    axes[1].imshow(cv2.cvtColor(bbox_img, cv2.COLOR_BGR2RGB))
+    axes[1].set_title("Predicted Image bboxes")
+    axes[1].axis('off')
+
+    # Display the predicted image with the color labels on the right
+    axes[2].imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    axes[2].set_title("Predicted Image color labels")
+    axes[2].axis('off')
+
+    plt.show()
 
 
 df = pd.DataFrame(list2)   # Create a DataFrame from the 'list2' data
 df1 = df.rename(columns={0: 'Class Name',1: 'Length', 2: 'Width', 3: 'Area'})    # Rename the columns for clarity
 excel_file_name = image_base_name + "_summary_px.xlsx"     # Define the name of the Excel file to be generated
-df1.to_excel(excel_file_name, index=False)  # Save the DataFrame as an Excel file
+excel_path = os.path.join(f'Result/pred_{image_base_name}', excel_file_name)
+df1.to_excel(excel_path, index=False)  # Save the DataFrame as an Excel file
 
 # Print a message to confirm the creation of the Excel file
 print(f"Excel file '{excel_file_name}' in pixels has been created.")
-
-
 
 # Multiply the values in the 'Length', 'Width', and 'Area' columns by conversion_value
 df1['Length'] = df1['Length'] * args.conversion
@@ -224,7 +237,8 @@ df1['Width'] = df1['Width'] * args.conversion
 df1['Area'] = df1['Area'] * args.conversion
 
 excel_file_name = image_base_name + "_summary_micron.xlsx"
+excel_path = os.path.join(f'Result/pred_{image_base_name}', excel_file_name)
 # Write the modified DataFrame back to the Excel file
-df1.to_excel(excel_file_name, index=False) 
+df1.to_excel(excel_path, index=False) 
 
 print(f"Excel file '{excel_file_name}' in standard values has been created.")
