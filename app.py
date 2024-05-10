@@ -39,9 +39,10 @@ def detect(model, img, imgsz, image_base_name):
     bboxes = np.array(result.boxes.xyxy.cpu(), dtype="int")
     class_ids = np.array(result.boxes.cls.cpu(), dtype="int")
     scores = np.array(result.boxes.conf.cpu(), dtype="float").round(2)
+    points = result.masks.xy
     
     # Return the detected bounding boxes, class IDs, segments, and scores
-    return bboxes, class_ids, segment, scores
+    return bboxes, points, class_ids, segment, scores
 
 def draw_mask(img, pts, color, alpha=0.5):
     h, w, _ = img.shape
@@ -87,12 +88,16 @@ def measure(model, path, image_base_name):
         imgsz = 2048  
         
     list2=[]
-    bboxes, classes, segmentations, scores = detect(model, img, imgsz, image_base_name)
+    bboxes, points, classes, segmentations, scores = detect(model, img, imgsz, image_base_name)
     #bboxes, classes, segmentations, scores, area = detect(model, img, imgsz)
-    for i, (bbox, class_id, seg, score) in enumerate(zip(bboxes, classes, segmentations, scores)):
-    # print("bbox:", bbox, "class id:", class_id, "seg:", seg, "score:", score)
+    for i, (bbox, point, class_id, seg, score) in enumerate(zip(bboxes, points, classes, segmentations, scores)):
+        rect = cv2.minAreaRect(point)
+        box1 = cv2.boxPoints(rect)
+        box1 = np.int0(box1)
+        if any(point[0] <= 0 or point[1] <= 0 or point[0] >= width - 1 or point[1] >= height - 1 for point in box1):
+            continue
         color = colors[i]
-        (x, y, x2, y2) = bbox 
+       # (x, y, x2, y2) = bbox 
         h, w = seg.shape
         mask_3channel = cv2.merge((seg, seg, seg))
         # Get the size of the original image (height, width, channels)
