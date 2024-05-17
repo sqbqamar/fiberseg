@@ -11,21 +11,16 @@ $ conda env create -f Fiberseg_env.yml
 
 $ conda activate fiberseg
 ```
-## Train Model with dataset
-Just open the Train_custom_data.ipynb file on Google Colab or the local system and follow the instructions as written in the file.  
-[Open Training file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/Train_custom_data.ipynb)
-
-Specially, set `overlap_mask=False` to get the individual mask for each instance, even when instances overlap with each other.
 
 ## Prediction by trained model
 
-`prediction.py` can deal with images and run into the CPU `devive='cpu'`, but it is recommendable to run in GPU, just set `devive=0`.
+`prediction.py` can deal with images and run into the CPU `device='cpu'`, but it is recommendable to run in GPU, just set `device=0`.
 
 ```bash
 Usage - sources:
-    $ python prediction.py --weights best.pt --source 'image/131.jpg' --mask --display --conversion 0.65                       
+    $ python prediction.py --weights best.pt --source image/131.jpg --mask --conversion 0.65                       
  ```
-In command line arguments, we load the model with the specified weights using the `--weight` argument and `--source` to specify the input image variable. The `--mask` argument is used to generate the masks and save them in the folder and --display argument is to see the color label output. The `--conversion` argument is used as the conversion factor when converting pixel values to standard units.
+In command line arguments, we load the model with the specified weights using the `--weight` argument and `--source` to specify the input image variable. The `--mask` argument is used to generate the masks and save them in the folder. The `--conversion` argument is used as the conversion factor when converting pixel values to standard units.
 
 [Open Prediction file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/prediction_file.ipynb)
 
@@ -42,7 +37,7 @@ Run:
 ```bash
 $ python app.py 
 ```
-Open the application in any browser 127.0.0.1:5000 and upload your image. The API will return the image labeled.
+Open the application in any browser 0.0.0.0:5000 and upload your image. The API will return the image labeled.
 
 
 
@@ -73,6 +68,11 @@ input_data = cv2.imread("Path/to/your image")
 We did not set the conversion ratio of each pixel because the pixel size varies across different microscopy images.
 In our case, we found that 1 pixel = 0.65 mm, but we use this ratio for calculations in the original manuscript.
 
+## Train Model with dataset
+Just open the Train_custom_data.ipynb file on Google Colab or the local system and follow the instructions as written in the file.  
+[Open Training file in Google Colab] (https://colab.research.google.com/github/sqbqamar/fiberseg/blob/main/Train_custom_data.ipynb)
+
+Specially, set `overlap_mask=False` to get the individual mask for each instance, even when instances overlap with each other.
+
 I uploaded separate `conversion.py` file to change the values in the Excel file according to your microscopic standard. Just update the conversion value on Line 13 in the code. However, this function is included in the `prediction.py`.
  
-
