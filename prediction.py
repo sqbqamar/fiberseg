@@ -51,6 +51,8 @@ elif 2500 < width < 5000:
     imgsz = 3000
 elif 5000 < width < 9000:
     imgsz = 6000
+elif width > 9000:
+    imgsz = int(width * 0.75)
     
 # If the image size could not be determined within the specified ranges, set it to 2048
 if imgsz is None:
