@@ -84,6 +84,8 @@ def measure(model, path, image_base_name):
         imgsz = 3000
     elif 5000 < width < 9000:
         imgsz = 6000
+    elif width > 9000:
+        imgsz = int(width * 0.75)
     if imgsz is None:
         imgsz = 2048  
         
